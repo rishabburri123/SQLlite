@@ -9,9 +9,14 @@ import {
   TextInput,
   View,
   Alert,
-
 } from "react-native";
-import { fetchItems, insertItem,updateItem,deleteItem type Item } from "../data/db";
+import {
+  fetchItems,
+  insertItem,
+  updateItem,
+  deleteItem,
+  type Item,
+} from "../data/db";
 
 export default function App() {
   /**
@@ -77,9 +82,7 @@ export default function App() {
     }
   };
 
-  
-
-/**
+  /**
    * Save or Update Item Function
    *
    * Validates user input, then either inserts a new record or updates
@@ -119,7 +122,12 @@ export default function App() {
       console.log("Failed to save/update item", err);
     }
   };
-
+  const sortQnt = async () => {
+    const value = await db.getAllAsync<Item>(
+      "SELECT * FROM items ORDER BY quantity ASC",
+    );
+    setItems(value);
+  };
   /**
    * Start Edit Function
    *
@@ -181,7 +189,6 @@ export default function App() {
     ]);
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SQLite Example</Text>
@@ -215,6 +222,7 @@ export default function App() {
         title={editingId === null ? "Save Item" : "Update Item"}
         onPress={saveOrUpdate}
       />
+      <Button title={"sort by Qty"} onPress={sortQnt} />
       <FlatList
         style={styles.list}
         data={items}
@@ -236,7 +244,6 @@ export default function App() {
             onEdit={() => startEdit(item)}
             onDelete={() => confirmDelete(item.id)}
           />
-
         )}
         ListEmptyComponent={
           <Text style={{ textAlign: "center", marginTop: 24, color: "#888" }}>
