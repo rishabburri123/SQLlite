@@ -128,6 +128,12 @@ export default function App() {
     );
     setItems(value);
   };
+  const sortAZ = async () => {
+    const value = await db.getAllAsync<Item>(
+      "SELECT * FROM items ORDER BY name ASC",
+    );
+    setItems(value);
+  };
   /**
    * Start Edit Function
    *
@@ -199,6 +205,13 @@ export default function App() {
         onChangeText={setName}
       />
 
+      <TextInput
+        style={styles.input}
+        placeholder="Item Name"
+        value={name}
+        onChangeText={setName}
+      />
+
       {/* 
         Quantity Input
         
@@ -223,6 +236,7 @@ export default function App() {
         onPress={saveOrUpdate}
       />
       <Button title={"sort by Qty"} onPress={sortQnt} />
+      <Button title={"Sort by A-Z"} onPress={sortAZ} />
       <FlatList
         style={styles.list}
         data={items}
